@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>TodoList + TypeScript</h1>
-    <TodoInput :todoText="todoText" @updateTodoText="updateTodoText"></TodoInput>
+    <TodoInput v-model="todoText" @add="addTodoItem" @input="todoText = $event"></TodoInput>
   </div>
 </template>
 
@@ -18,8 +18,15 @@ export default Vue.extend({
   },
   methods: {
     updateTodoText(value: string) {
-      console.log('value: ', value);
       this.todoText = value;
+    },
+    addTodoItem() {
+      const value = this.todoText;
+      localStorage.setItem(value, value);
+      this.initTodoText();
+    },
+    initTodoText() {
+      this.todoText = '';
     },
   },
 });
