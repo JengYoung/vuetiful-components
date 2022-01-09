@@ -14,8 +14,15 @@ export default Vue.extend({
     prop: 'inputValue',
     event: 'update:inputValue',
   },
+  props: {
+    todoText: {
+      type: String,
+      required: false,
+    },
+  },
   methods: {
-    handleInput(e: Event) {
+    handleInput(e: InputEvent) {
+      if (!e.target) return;
       this.$emit('update:inputValue', (e.target as HTMLInputElement).value);
     },
     addTodo() {
