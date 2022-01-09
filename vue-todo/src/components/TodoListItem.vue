@@ -1,7 +1,15 @@
 <template>
-  <li @click="toggleTodo">
-    <span :class="todoItemClass">{{ title }}</span>
-    <button @click="removeTodo">삭제</button>
+  <li>
+    <template v-if="showTitle">
+      <span :class="todoItemClass" @click="toggleTodo">{{ title }}</span>
+      <button @click="changeShowTitle">수정</button>
+      <button @click="removeTodo">삭제</button>
+    </template>
+    <template v-else>
+      <input type="text" v-model="defaultTitle" />
+      <button @click="updateTodo">수정 완료</button>
+      <button @click="changeShowTitle">취소</button>
+    </template>
   </li>
 </template>
 
@@ -13,19 +21,34 @@ export default Vue.extend({
     title: String,
     completed: Boolean,
   },
+  data: function () {
+    return {
+      defaultTitle: '',
+      showTitle: true,
+    };
+  },
   computed: {
     todoItemClass(): string[] {
       return ['item', ...(this.completed ? ['completed'] : [])];
     },
   },
   methods: {
+    changeShowTitle() {
+      this.showTitle = !this.showTitle;
+    },
     removeTodo() {
       this.$emit('update:deleteTodoItem', this.todoId);
     },
     toggleTodo() {
-      console.log(this.todoId);
       this.$emit('update:toggle', this.todoId);
     },
+    updateTodo() {
+      this.$emit('update:updateTodo', this.todoId, this.defaultTitle);
+      this.changeShowTitle();
+    },
+  },
+  created() {
+    this.defaultTitle = this.title;
   },
 });
 </script>

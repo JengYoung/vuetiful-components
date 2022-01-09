@@ -18,6 +18,7 @@
           :completed="completed"
           @update:deleteTodoItem="deleteTodoItem"
           @update:toggle="toggleTodoItemComplete"
+          @update:updateTodo="updateTodoItemTitle"
         ></TodoListItem>
       </ul>
     </article>
@@ -78,6 +79,13 @@ export default Vue.extend({
           ...todoItem,
           completed: todoItem.id === todoId ? !todoItem.completed : todoItem.completed,
         };
+      });
+      storage.save(this.todoItems);
+      this.fetchTodoItems();
+    },
+    updateTodoItemTitle(id: string, updatedTitle: string) {
+      this.todoItems = this.todoItems.map((todoItem) => {
+        return { ...todoItem, title: id === todoItem.id ? updatedTitle : todoItem.title };
       });
       storage.save(this.todoItems);
       this.fetchTodoItems();
