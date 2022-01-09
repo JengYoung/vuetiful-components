@@ -8,7 +8,7 @@
     <template v-else>
       <input type="text" v-model="defaultTitle" />
       <button @click="updateTodo">수정 완료</button>
-      <button @click="changeShowTitle">취소</button>
+      <button @click="cancelTodo">취소</button>
     </template>
   </li>
 </template>
@@ -44,6 +44,10 @@ export default Vue.extend({
     },
     updateTodo() {
       this.$emit('update:updateTodo', this.todoId, this.defaultTitle);
+      this.changeShowTitle();
+    },
+    cancelTodo() {
+      this.defaultTitle = this.title;
       this.changeShowTitle();
     },
   },
