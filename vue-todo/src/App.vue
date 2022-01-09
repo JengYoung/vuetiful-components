@@ -64,6 +64,7 @@ export default Vue.extend({
       this.todoItems.push({ id, title: value, completed: false });
       storage.save(this.todoItems);
       this.initTodoText();
+      this.fetchTodoItems();
     },
     deleteTodoItem(todoId: string) {
       this.todoItems = this.todoItems.filter(({ id }) => {
@@ -78,13 +79,19 @@ export default Vue.extend({
           completed: todoItem.id === todoId ? !todoItem.completed : todoItem.completed,
         };
       });
+      storage.save(this.todoItems);
+      this.fetchTodoItems();
     },
     initTodoText() {
       this.todoText = '';
-      console.log('result: ', this.todoText);
     },
     fetchTodoItems() {
-      this.todoItems = storage.fetch();
+      this.todoItems = storage.fetch().sort((a: Todo, b: Todo) => {
+        if (a.completed !== b.completed) {
+          return +a.completed - +b.completed;
+        }
+        return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
+      });
     },
   },
   created() {
